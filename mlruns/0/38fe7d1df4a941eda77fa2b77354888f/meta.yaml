@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/MLOPS/ML-OPs%20Mini-Project/mlruns/0/38fe7d1df4a941eda77fa2b77354888f/artifacts
+end_time: 1739355348048
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 38fe7d1df4a941eda77fa2b77354888f
+run_name: selective-hog-462
+run_uuid: 38fe7d1df4a941eda77fa2b77354888f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739355338770
+status: 3
+tags: []
+user_id: Aniket

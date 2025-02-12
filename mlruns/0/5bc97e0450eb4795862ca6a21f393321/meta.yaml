@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/MLOPS/ML-OPs%20Mini-Project/mlruns/0/5bc97e0450eb4795862ca6a21f393321/artifacts
+end_time: 1739354920603
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5bc97e0450eb4795862ca6a21f393321
+run_name: bedecked-chimp-868
+run_uuid: 5bc97e0450eb4795862ca6a21f393321
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739354918303
+status: 3
+tags: []
+user_id: Aniket

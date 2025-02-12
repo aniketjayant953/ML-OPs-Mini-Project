@@ -1,4 +1,4 @@
 [core]
     remote = myremote
 ['remote "myremote"']
-    url = C:\Users\Aniket\AppData\Local\Temp
+    url = C:\Users\Aniket\AppData\Local\Temp\projects

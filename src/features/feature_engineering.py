@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import yaml
 import logging
 import pickle
+import mlflow
 
 # logging configuration
 logger = logging.getLogger('feature_engineering')
@@ -76,6 +77,8 @@ def apply_bow(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: i
 
         # save vectorizer for later
         pickle.dump(vectorizer, open('models/vectorizer.pkl', 'wb'))
+
+        mlflow.log_param('max_features',max_features)
 
         logger.debug('Bag of Words applied and data transformed')
         return train_df, test_df
