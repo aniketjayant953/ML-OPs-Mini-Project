@@ -33,15 +33,11 @@ jobs:
         run: |
           dvc repro
 
+      - name: Run Test
+        env:  
+          DAGSHUB_PAT: ${{secrets.DAGSHUB_PAT}}
+        run: |
+          python -m unittest test/test_model.py
 
-  model-testing:
-    needs: project-testing
-    runs-on: ubuntu-latest
-
-    steps: 
-        - name: Run Test
-          env:  
-            DAGSHUB_PAT: ${{secrets.DAGSHUB_PAT}}
-          run: |
-            python -m unittest test/test_model.py
+    
 
