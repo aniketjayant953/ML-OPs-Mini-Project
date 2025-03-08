@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/MLOPS/ML-OPs%20Mini-Project/mlruns/0/6384ee9a93e14007bfd44f5dbb3da94f/artifacts
+end_time: 1741420229843
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6384ee9a93e14007bfd44f5dbb3da94f
+run_name: clean-sloth-106
+run_uuid: 6384ee9a93e14007bfd44f5dbb3da94f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741420222584
+status: 3
+tags: []
+user_id: Aniket
