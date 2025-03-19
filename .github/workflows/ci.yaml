@@ -89,24 +89,29 @@ jobs:
 
       #### ECR CODE ####
       - name: Login to AWS ECR
+        if: success()
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID}} 
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 864899871537.dkr.ecr.eu-north-1.amazonaws.com
           
       - name: Build docker image
+        if: success()
         run: |
           docker build -t campusx_ecr .
 
       - name: verify docker image
+        if: success()
         run: |
           docker images | grep campusx-ecr
       
       - name: Tag docker image
+        if: success()
         run: |
           docker tag campusx-ecr:latest 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx-ecr:latest
 
       - name: Push docker image to ECR
+        if: success()
         run: |
           docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx-ecr:latest
           
