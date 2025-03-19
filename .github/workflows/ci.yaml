@@ -103,15 +103,15 @@ jobs:
       - name: verify docker image
         if: success()
         run: |
-          docker images | grep campusx-ecr
+          docker images | grep campusx_ecr
       
       - name: Tag docker image
         if: success()
         run: |
-          docker tag campusx-ecr:latest 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx-ecr:latest
+          docker tag campusx_ecr:latest 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
 
       - name: Push docker image to ECR
         if: success()
         run: |
-          docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx-ecr:latest
+          docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
           
