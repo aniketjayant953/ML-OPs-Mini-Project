@@ -52,34 +52,57 @@ jobs:
           DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
         run: python -m unittest tests/test_flask_app.py
 
-      - name: Login to Docker
-        if: success()
-        uses: docker/login-action@v2
-        with:
-          username: ${{secrets.DOCKER_HUB_USERNAME}}
-          password: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} 
+      #### DOCKER CODE #####
 
-      - name: Build Docker Image
-        if: success()
+      # - name: Login to Docker
+      #   if: success()
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{secrets.DOCKER_HUB_USERNAME}}
+      #     password: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} 
+
+      # - name: Build Docker Image
+      #   if: success()
+      #   run: |
+      #     docker build -t ${{secrets.DOCKER_HUB_USERNAME}}/emotions:latest .
+
+      # - name: Push the Image
+      #   if: success()
+      #   run: | 
+      #     docker push ${{secrets.DOCKER_HUB_USERNAME}}/emotions:latest
+
+      # - name: Deploy to EC2
+      #   if: success()
+      #   uses: appleboy/ssh-action@v0.1.5
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotions:latest
+      #       docker stop my-app || true
+      #       docker rm my-app || true
+      #       docker run -p 80:5000 --name my-app \
+      #         -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT}} \
+      #         ${{ secrets.DOCKER_HUB_USERNAME }}/emotions:latest
+
+
+      #### ECR CODE ####
+      - name: Login to AWS ECR
         run: |
-          docker build -t ${{secrets.DOCKER_HUB_USERNAME}}/emotions:latest .
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID}} 
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 864899871537.dkr.ecr.eu-north-1.amazonaws.com
+          
+      - name: Build docker image
+        run: |
+          docker build -t campusx_ecr .
+      
+      - name: Tag docker image
+        run: |
+          docker tag campusx-ecr:latest 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx-ecr:latest
 
-      - name: Push the Image
-        if: success()
-        run: | 
-          docker push ${{secrets.DOCKER_HUB_USERNAME}}/emotions:latest
-
-      - name: Deploy to EC2
-        if: success()
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotions:latest
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -p 80:5000 --name my-app \
-              -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT}} \
-              ${{ secrets.DOCKER_HUB_USERNAME }}/emotions:latest
+      - name: Push docker image to ECR
+        run: |
+          docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx-ecr:latest
+          
