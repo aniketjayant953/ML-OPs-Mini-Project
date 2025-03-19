@@ -97,6 +97,10 @@ jobs:
       - name: Build docker image
         run: |
           docker build -t campusx_ecr .
+
+      - name: verify docker image
+        run: |
+          docker images | grep campusx-ecr
       
       - name: Tag docker image
         run: |
