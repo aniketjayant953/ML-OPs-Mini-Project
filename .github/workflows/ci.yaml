@@ -158,7 +158,7 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID}} 
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
            aws deploy create-deployment \
-            --application-name MyApplication2 \
+            --application-name MyApplicaton2 \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name MyDockerAppASGDeployment \
             --s3-location bucket=aniketcodedeploybucket,key=deployment.zip,bundleType=zip \
