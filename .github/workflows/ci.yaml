@@ -98,22 +98,22 @@ jobs:
       - name: Build docker image
         if: success()
         run: |
-          docker build -t campusx_ecr .
+          docker build -provenance false -t emotion-project-ecr .
 
       - name: verify docker image
         if: success()
         run: |
-          docker images | grep campusx_ecr
+          docker images | grep emotion-project-ecr
       
       - name: Tag docker image
         if: success()
         run: |
-          docker tag campusx_ecr:latest 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
+          docker tag emotion-project-ecr:latest 864899871537.dkr.ecr.eu-north-1.amazonaws.com/emotion-project-ecr:latest
 
       - name: Push docker image to ECR
         if: success()
         run: |
-          docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
+          docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/emotion-project-ecr:latest
           
       # - name: Deploy to EC2
       #   if: success()
