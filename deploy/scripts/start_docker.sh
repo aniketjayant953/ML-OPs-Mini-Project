@@ -6,16 +6,20 @@ aws ecr get-login-password --region eu-north-1 | docker login --username AWS --p
 # Pull the latest image
 docker pull 864899871537.dkr.ecr.eu-north-1.amazonaws.com/emotion-project-ecr:v3
 
-# Check if the container  'campusx-app' is running
+# Stop the container if it is running
 if [ "$(docker ps -q -f name=campusx-app)" ]; then
-    # Stop the container
-    docker stop campusx-app 
+    echo "Stopping container campusx-app..."
+    docker stop campusx-app
+else
+    echo "Container campusx-app is not running."
 fi
 
-# Check if the container 'campusx-app' exists (stopped or running)
-if [ "$(docker ps -q -f name=campusx-app)" ]; then
-    # Remove the container if it exists
-    docker rm campusx-app 
+# Remove the container, whether it's stopped or not
+if [ "$(docker ps -a -q -f name=campusx-app)" ]; then
+    echo "Removing container campusx-app..."
+    docker rm campusx-app
+else
+    echo "No container named campusx-app found."
 fi
 
 # Run the new container
