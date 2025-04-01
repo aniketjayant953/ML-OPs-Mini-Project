@@ -115,21 +115,48 @@ jobs:
         run: |
           docker push 864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
           
-      - name: Deploy to EC2
-        if: success()
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID}} 
-            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
-            aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 864899871537.dkr.ecr.eu-north-1.amazonaws.com
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotions:latest
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -p 80:5000 --name my-app \
-              -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT}} \
-              864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
+      # - name: Deploy to EC2
+      #   if: success()
+      #   uses: appleboy/ssh-action@v0.1.5
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID}} 
+      #       aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+      #       aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 864899871537.dkr.ecr.eu-north-1.amazonaws.com
+      #       docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotions:latest
+      #       docker stop my-app || true
+      #       docker rm my-app || true
+      #       docker run -p 80:5000 --name my-app \
+      #         -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT}} \
+      #         864899871537.dkr.ecr.eu-north-1.amazonaws.com/campusx_ecr:latest
               
+
+      ### Deploy to Code Deploy
+      
+      # Create zip file
+      - name: Zip files for deployement
+        run: |
+          zip -r deployment.zip appspec.yml deploy/scripts/install_dependencies.sh deploy/scripts/start_docker.sh
+
+      # Upload the Zip file to s3
+      - name: Upload to ZIP to S3
+        if: success()
+        run: |
+          aws s3 cp deployment.zip s3://aniketcodedeploybucket/deployment.zip
+
+      # Deploy to AWS CodeDeploy using the uploaded ZIP file
+      - name: Deploy to AWS CodeDeploy
+        if: success()
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID}} 
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY}} 
+           aws deploy create-deployment \
+            --application-name MyApplication2 \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name MyDockerAppASGDeployment \
+            --s3-location bucket=aniketcodedeploybucket,key=deployment.zip,bundleType=zip \
+            --file-exists-behavior OVERWRITE \
+            --region eu-north-1
