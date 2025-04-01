@@ -138,6 +138,7 @@ jobs:
       
       # Create zip file
       - name: Zip files for deployement
+        if: success()
         run: |
           zip -r deployment.zip appspec.yml deploy/scripts/install_dependencies.sh deploy/scripts/start_docker.sh
 

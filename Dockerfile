@@ -13,11 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY flask_app /app/
 COPY models/vectorizer.pkl  /app/models/vectorizer.pkl
 
-# Download only the necessary NLTK data
-# RUN python -m nltk.downloader stopwords wordnet
+Download only the necessary NLTK data
+RUN python -m nltk.downloader stopwords wordnet
 
 # Download only the necessary spacy data
-RUN python -m spacy download en_core_web_sm
+# RUN python -m spacy download en_core_web_sm
 
 # Stage2. Final stage
 FROM python:3.11.3-slim AS final
