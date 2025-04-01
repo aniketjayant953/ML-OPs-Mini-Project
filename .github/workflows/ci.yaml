@@ -55,10 +55,6 @@ jobs:
           DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
         run: python -m unittest tests/test_flask_app.py
 
-      - name: Install spaCy model
-  run: python -m spacy download en_core_web_sm
-
-
       #### DOCKER CODE #####
 
       # - name: Login to Docker
