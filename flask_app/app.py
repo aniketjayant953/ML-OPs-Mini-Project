@@ -9,39 +9,39 @@ import numpy as np
 import pandas as pd
 import os
 import re
-import nltk
+# import nltk
 import string
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-
-def lemmatization(text):
-    """Lemmatize the text."""
-    lemmatizer = WordNetLemmatizer()
-    text = text.split()
-    text = [lemmatizer.lemmatize(word) for word in text]
-    return " ".join(text)
-
-
-def remove_stop_words(text):
-    """Remove stop words from the text."""
-    stop_words = set(stopwords.words("english"))
-    text = [word for word in str(text).split() if word not in stop_words]
-    return " ".join(text)
-
-
-# import spacy
-# nlp = spacy.load("en_core_web_sm")
+# from nltk.corpus import stopwords
+# from nltk.stem import WordNetLemmatizer
 
 # def lemmatization(text):
-#     """Lemmatize text using spaCy (equivalent to WordNetLemmatizer)."""
-#     doc = nlp(text)
-#     return " ".join([token.lemma_ for token in doc])
+#     """Lemmatize the text."""
+#     lemmatizer = WordNetLemmatizer()
+#     text = text.split()
+#     text = [lemmatizer.lemmatize(word) for word in text]
+#     return " ".join(text)
+
 
 # def remove_stop_words(text):
-#     """Remove stop words from the text using spaCy."""
-#     doc = nlp(text)
-#     text = [token.text for token in doc if not token.is_stop]
+#     """Remove stop words from the text."""
+#     stop_words = set(stopwords.words("english"))
+#     text = [word for word in str(text).split() if word not in stop_words]
 #     return " ".join(text)
+
+
+import spacy
+nlp = spacy.load("en_core_web_sm")
+
+def lemmatization(text):
+    """Lemmatize text using spaCy (equivalent to WordNetLemmatizer)."""
+    doc = nlp(text)
+    return " ".join([token.lemma_ for token in doc])
+
+def remove_stop_words(text):
+    """Remove stop words from the text using spaCy."""
+    doc = nlp(text)
+    text = [token.text for token in doc if not token.is_stop]
+    return " ".join(text)
 
 def removing_numbers(text):
     """Remove numbers from the text."""
