@@ -98,7 +98,7 @@ jobs:
       - name: Build docker image
         if: success()
         run: |
-          docker build -provenance false -t emotion-project-ecr .
+          docker build --provenance false -t emotion-project-ecr .
 
       - name: verify docker image
         if: success()
